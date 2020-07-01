@@ -23,6 +23,9 @@ let AuthService = class AuthService {
     async signUp(authCredentialsDto) {
         return this.userRepository.signUp(authCredentialsDto);
     }
+    async signIn(authCredentialsDto) {
+        return await this.userRepository.signIn(authCredentialsDto);
+    }
 };
 AuthService = __decorate([
     common_1.Injectable(),

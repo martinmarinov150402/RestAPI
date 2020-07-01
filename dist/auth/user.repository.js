@@ -9,13 +9,38 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRepository = void 0;
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("./user.entity");
+const bcrypt = require("bcrypt");
 let UserRepository = class UserRepository extends typeorm_1.Repository {
     async signUp(authCredentialsDto) {
         const { username, password } = authCredentialsDto;
         const user = new user_entity_1.User();
+        const salt = await bcrypt.genSalt();
         user.username = username;
-        user.password = password;
-        await user.save();
+        user.password = await this.hashPassword(password, salt);
+        user.salt = salt;
+        try {
+            await user.save();
+        }
+        catch (error) {
+            console.log(error.code());
+        }
+    }
+    async hashPassword(password, salt) {
+        return bcrypt.hash(password, salt);
+    }
+    signIn(authCredentialsDto) {
+        return this.validateUserPassword(authCredentialsDto);
+    }
+    async validateUserPassword(authCredentialsDto) {
+        const { username, password } = authCredentialsDto;
+        const user = await this.findOne({ username });
+        const hashed = await this.hashPassword(password, user.salt);
+        if (user.password === hashed) {
+            return username;
+        }
+        else {
+            return "no";
+        }
     }
 };
 UserRepository = __decorate([

@@ -4,4 +4,5 @@ export declare class AuthService {
     private userRepository;
     constructor(userRepository: UserRepository);
     signUp(authCredentialsDto: AuthCredentialsDTO): Promise<void>;
+    signIn(authCredentialsDto: AuthCredentialsDTO): Promise<string>;
 }
