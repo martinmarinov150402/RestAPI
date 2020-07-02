@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const tasks_service_1 = require("./tasks.service");
 const create_task_dto_1 = require("./dto/create-task.dto");
 const task_status_validation_pipe_1 = require("./pipes/task-status-validation.pipe");
+const passport_1 = require("@nestjs/passport");
 let TasksController = class TasksController {
     constructor(tasksService) {
         this.tasksService = tasksService;
@@ -74,6 +75,7 @@ __decorate([
 ], TasksController.prototype, "patchTask", null);
 TasksController = __decorate([
     common_1.Controller('tasks'),
+    common_1.UseGuards(passport_1.AuthGuard('jwt')),
     __metadata("design:paramtypes", [tasks_service_1.TasksService])
 ], TasksController);
 exports.TasksController = TasksController;

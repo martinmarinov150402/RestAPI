@@ -30,6 +30,7 @@ let AuthController = class AuthController {
         return this.authService.signIn(authCredentialsDto);
     }
     test(user, req) {
+        console.log(user);
     }
 };
 __decorate([
