@@ -16,21 +16,30 @@ exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const user_repository_1 = require("./user.repository");
 const typeorm_1 = require("@nestjs/typeorm");
+const jwt_1 = require("@nestjs/jwt");
 let AuthService = class AuthService {
-    constructor(userRepository) {
+    constructor(userRepository, jwtService) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
     async signUp(authCredentialsDto) {
         return this.userRepository.signUp(authCredentialsDto);
     }
     async signIn(authCredentialsDto) {
-        return await this.userRepository.signIn(authCredentialsDto);
+        const username = await this.userRepository.signIn(authCredentialsDto);
+        if (username == "no") {
+            throw new common_1.UnauthorizedException('Invalid credentials');
+        }
+        const payload = { username };
+        const accessToken = this.jwtService.sign(payload);
+        return { accessToken };
     }
 };
 AuthService = __decorate([
     common_1.Injectable(),
     __param(0, typeorm_1.InjectRepository(user_repository_1.UserRepository)),
-    __metadata("design:paramtypes", [user_repository_1.UserRepository])
+    __metadata("design:paramtypes", [user_repository_1.UserRepository,
+        jwt_1.JwtService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map
