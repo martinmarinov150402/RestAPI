@@ -18,59 +18,62 @@ const tasks_service_1 = require("./tasks.service");
 const create_task_dto_1 = require("./dto/create-task.dto");
 const task_status_validation_pipe_1 = require("./pipes/task-status-validation.pipe");
 const passport_1 = require("@nestjs/passport");
+const get_user_decorator_1 = require("../auth/get-user.decorator");
+const user_entity_1 = require("../auth/user.entity");
 let TasksController = class TasksController {
     constructor(tasksService) {
         this.tasksService = tasksService;
     }
-    getTaskByID(id) {
-        return this.tasksService.getTaskByID(id);
+    getTaskByID(id, user) {
+        return this.tasksService.getTaskByID(id, user);
     }
-    crateNewTask(createtaskdto) {
-        return this.tasksService.createTask(createtaskdto);
+    crateNewTask(createtaskdto, user) {
+        return this.tasksService.createTask(createtaskdto, user);
     }
-    deleteTask(id) {
-        this.tasksService.deleteTaskByID(id);
+    deleteTask(id, user) {
+        this.tasksService.deleteTaskByID(id, user);
     }
-    getTasks() {
-        return this.tasksService.getTasks();
+    getTasks(user) {
+        return this.tasksService.getTasks(user);
     }
-    patchTask(id, item, val) {
-        return this.tasksService.patchTask(id, item, val);
+    patchTask(id, user, item, val) {
+        return this.tasksService.patchTask(id, user, item, val);
     }
 };
 __decorate([
     common_1.Get("/:id"),
-    __param(0, common_1.Param("id", common_1.ParseIntPipe)),
+    __param(0, common_1.Param("id", common_1.ParseIntPipe)), __param(1, get_user_decorator_1.GetUser()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "getTaskByID", null);
 __decorate([
     common_1.Post(),
     common_1.UsePipes(common_1.ValidationPipe),
-    __param(0, common_1.Body()),
+    __param(0, common_1.Body()), __param(1, get_user_decorator_1.GetUser()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_task_dto_1.CreateTaskDTO]),
+    __metadata("design:paramtypes", [create_task_dto_1.CreateTaskDTO, user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "crateNewTask", null);
 __decorate([
     common_1.Delete("/:id"),
-    __param(0, common_1.Param("id", common_1.ParseIntPipe)),
+    __param(0, common_1.Param("id", common_1.ParseIntPipe)), __param(1, get_user_decorator_1.GetUser()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, user_entity_1.User]),
     __metadata("design:returntype", void 0)
 ], TasksController.prototype, "deleteTask", null);
 __decorate([
     common_1.Get(),
+    __param(0, get_user_decorator_1.GetUser()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "getTasks", null);
 __decorate([
     common_1.Patch("/:id/:item"),
-    __param(0, common_1.Param("id", common_1.ParseIntPipe)), __param(1, common_1.Param("item")), __param(2, common_1.Body("val", task_status_validation_pipe_1.TaskStatusValidationPipe)),
+    __param(0, common_1.Param("id", common_1.ParseIntPipe)), __param(1, get_user_decorator_1.GetUser()), __param(2, common_1.Param("item")), __param(3, common_1.Body("val", task_status_validation_pipe_1.TaskStatusValidationPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, String, String]),
+    __metadata("design:paramtypes", [Number, user_entity_1.User, String, String]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "patchTask", null);
 TasksController = __decorate([

@@ -21,7 +21,7 @@ export class UserRepository extends Repository<User>
         }
         catch(error)
         {
-            console.log(error.code());
+            console.log(error.code);
         }
         
     }

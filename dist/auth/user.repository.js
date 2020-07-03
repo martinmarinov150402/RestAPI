@@ -22,7 +22,7 @@ let UserRepository = class UserRepository extends typeorm_1.Repository {
             await user.save();
         }
         catch (error) {
-            console.log(error.code());
+            console.log(error.code);
         }
     }
     async hashPassword(password, salt) {

@@ -11,29 +11,35 @@ const typeorm_1 = require("typeorm");
 const task_entity_1 = require("./task.entity");
 const task_status_enum_1 = require("./task-status.enum");
 const common_1 = require("@nestjs/common");
+const user_entity_1 = require("../auth/user.entity");
 let TaskRepository = class TaskRepository extends typeorm_1.Repository {
-    async getTasks() {
+    async findTaskById(id, user) {
         const query = this.createQueryBuilder('task');
+        query.andWhere("task.userId = :userId", { userId: user.id });
+        query.andWhere("task.id = :taskId", { taskId: id });
+        return await query.getOne();
+    }
+    async getTasks(user) {
+        const query = this.createQueryBuilder('task');
+        query.andWhere('task.userId = :userId', { userId: user.id });
         const tasks = await query.getMany();
         return tasks;
     }
-    async createTask(createTaskDto) {
+    async createTask(createTaskDto, user) {
         const task = new task_entity_1.Task();
         const { title, description } = createTaskDto;
         task.title = title;
         task.description = description;
         task.status = task_status_enum_1.TaskStatus.OPEN;
+        task.user = user;
         await task.save();
+        delete task.user;
         return task;
     }
-    async deleteTask(id) {
-        const task = this.findOne(id);
-        if (!task) {
+    async deleteTask(id, user) {
+        const task = await this.delete({ id, userId: user.id });
+        if (task.affected === 0) {
             throw new common_1.NotFoundException('Task not found');
-        }
-        else {
-            const res = await this.delete(id);
-            return res;
         }
     }
 };

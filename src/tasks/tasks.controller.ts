@@ -6,37 +6,39 @@ import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
 import { Task } from './task.entity';
 import { DeleteResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/auth/user.entity';
 
 @Controller('tasks')
 @UseGuards(AuthGuard('jwt'))
 export class TasksController {
     constructor(private tasksService:TasksService){}
     @Get("/:id")
-    getTaskByID(@Param("id",ParseIntPipe) id:number):Promise<Task>
+    getTaskByID(@Param("id",ParseIntPipe) id:number, @GetUser() user:User):Promise<Task>
     {
-        return this.tasksService.getTaskByID(id);
+        return this.tasksService.getTaskByID(id,user);
     }
     
     @Post()
     @UsePipes(ValidationPipe)
     crateNewTask(
-        @Body() createtaskdto:CreateTaskDTO
+        @Body() createtaskdto:CreateTaskDTO, @GetUser() user:User
     ):Promise<Task> {
-        return this.tasksService.createTask(createtaskdto);
+        return this.tasksService.createTask(createtaskdto,user);
     }
 
     @Delete("/:id")
-    deleteTask(@Param("id", ParseIntPipe) id:number):void
+    deleteTask(@Param("id", ParseIntPipe) id:number,@GetUser() user:User):void
     {
-        this.tasksService.deleteTaskByID(id);
+        this.tasksService.deleteTaskByID(id,user);
     }
     @Get()
-    getTasks(): Promise<Task[]> {
-        return this.tasksService.getTasks();
+    getTasks(@GetUser() user:User): Promise<Task[]> {
+        return this.tasksService.getTasks(user);
     }
     @Patch("/:id/:item")
-    patchTask(@Param("id",ParseIntPipe) id:number,@Param("item") item:string,@Body("val",TaskStatusValidationPipe) val:string):Promise<Task>
+    patchTask(@Param("id",ParseIntPipe) id:number,@GetUser() user:User,@Param("item") item:string,@Body("val",TaskStatusValidationPipe) val:string):Promise<Task>
     {
-        return this.tasksService.patchTask(id,item,val);
+        return this.tasksService.patchTask(id,user,item,val);
     }
 }
