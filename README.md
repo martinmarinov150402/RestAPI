@@ -47,6 +47,19 @@ db:
 jwt:
   secret: 'SecretASD'
 
+Also in this folder you should make file called default.yml. Copy this example and change it for yourself:
+
+server:
+  port: 3000
+
+db:
+  type: 'postgres'
+  port: 5432
+  database: 'taskmanagement'
+
+jwt: 
+  expiresIn: 3600
+  
 After that run it in production mode. After first run I recommnd you to change synchronize to false.
 ```
 
