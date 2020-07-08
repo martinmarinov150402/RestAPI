@@ -32,6 +32,10 @@
 
 ```bash
 $ npm install
+
+IMPORTANT!!!
+After instalation you should make folder called "config" and put in it file called "production.yml".
+This file should contain
 ```
 
 ## Running the app
