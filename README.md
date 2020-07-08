@@ -33,9 +33,40 @@
 ```bash
 $ npm install
 
+<<<<<<< HEAD
 IMPORTANT!!!
 After instalation you should make folder called "config" and put in it file called "production.yml".
 This file should contain
+=======
+
+IMPORTANT!!!
+After instalation you should make folder called "config" and put in it file called "production.yml".
+This file should contain information for your database and your JWT Secret.
+Copy this example in the file and fill it with your data.
+db:
+  host: 'localhost'
+  username: 'postgres'
+  password: 'postgres'
+  synchronize: true
+
+jwt:
+  secret: 'SecretASD'
+
+Also in this folder you should make file called default.yml. Copy this example and change it for yourself:
+
+server:
+  port: 3000
+
+db:
+  type: 'postgres'
+  port: 5432
+  database: 'taskmanagement'
+
+jwt: 
+  expiresIn: 3600
+  
+After that run it in production mode. After first run I recommnd you to change synchronize to false.
+>>>>>>> 6e8ef51341e7149da9e3563e0a29342b859c3814
 ```
 
 ## Running the app
