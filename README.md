@@ -32,6 +32,22 @@
 
 ```bash
 $ npm install
+
+
+IMPORTANT!!!
+After instalation you should make folder called "config" and put in it file called "production.yml".
+This file should contain information for your database and your JWT Secret.
+Copy this example in the file and fill it with your data.
+db:
+  host: 'localhost'
+  username: 'postgres'
+  password: 'postgres'
+  synchronize: true
+
+jwt:
+  secret: 'SecretASD'
+
+After that run it in production mode. After first run I recommnd you to change synchronize to false.
 ```
 
 ## Running the app
