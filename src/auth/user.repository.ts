@@ -3,31 +3,38 @@ import { User } from "./user.entity";
 import { AuthCredentialsDTO } from "./dto/auth-credentials.dto";
 import * as bcrypt from 'bcrypt';
 import { noop } from "rxjs";
+import { InternalServerErrorException, ConflictException } from '@nestjs/common';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User>
 {
     async signUp(authCredentialsDto:AuthCredentialsDTO):Promise<void>
     {
-        const {username,password} = authCredentialsDto;
+        const { username,password } = authCredentialsDto;
         const user = new User();
-        const salt=await bcrypt.genSalt();
-        user.username=username;
-        user.password=await this.hashPassword(password,salt);
-        user.salt=salt;
+        const salt = await bcrypt.genSalt();
+        user.username = username;
+        user.password = await this.hashPassword(password,salt);
+        user.salt = salt;
         try
         {
            await user.save(); 
         }
         catch(error)
         {
-            console.log(error.code);
+            switch (error.code) {
+                case '23505':
+                    throw new ConflictException('User already exists');
+                    break;
+                default:
+                    throw  new InternalServerErrorException();
+            }
         }
         
     }
-    private async hashPassword(password:string, salt:string):Promise<string>
+    private async hashPassword(password: string, salt: string): Promise<string>
     {
-        return bcrypt.hash(password,salt);
+        return await bcrypt.hash(password, salt);
     }
     signIn(authCredentialsDto:AuthCredentialsDTO):Promise<string>
     {
@@ -35,16 +42,16 @@ export class UserRepository extends Repository<User>
     }
     private async validateUserPassword(authCredentialsDto):Promise<string>
     {
-        const {username,password} = authCredentialsDto;
-        const user = await this.findOne({username});
-        const hashed = await this.hashPassword(password,user.salt);
-        if(user.password===hashed)
-        {
-            return username;
-        }
+        const { username, password } = authCredentialsDto;
+        const user = await this.findOne({ username });
+        if (user)
+            var hashed = await this.hashPassword(password, user.salt);
         else
-        {
-            return "no";
-        }
+            return undefined;
+
+        if (hashed === user.password)
+            return username;
+
+        return undefined;
     }
 }
