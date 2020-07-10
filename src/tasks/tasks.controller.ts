@@ -10,7 +10,7 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 
 @Controller('tasks')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard())
 export class TasksController {
     constructor(private tasksService:TasksService){}
     @Get("/:id")

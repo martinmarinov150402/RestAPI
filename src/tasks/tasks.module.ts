@@ -5,6 +5,7 @@ import * as uuid from 'uuid';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskRepository } from './tasks.repository';
 import { AuthModule } from 'src/auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [

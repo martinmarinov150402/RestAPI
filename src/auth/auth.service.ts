@@ -19,6 +19,7 @@ export class AuthService {
     async signIn(authCredentialsDto:AuthCredentialsDTO):Promise<{accessToken:string}>
     {
         const username = await this.userRepository.signIn(authCredentialsDto);
+        console.log("Username: "+username);
         if(username=="no")
         {
             throw new UnauthorizedException('Invalid credentials');
