@@ -6,7 +6,7 @@ import {configObject} from './config.object';
 import {ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  const serverConfig = config.get('server');
+  //const serverConfig = config.get('server');
   //console.log(typeOrmConfig.database);
   /*console.log(process.env);
   console.log(process.env.DB_NAME);*/

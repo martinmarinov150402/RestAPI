@@ -6,11 +6,11 @@ import { UserRepository } from './user.repository';
 import {JwtModule} from '@nestjs/jwt'
 import {PassportModule} from '@nestjs/passport'
 import { JwtStrategy } from './jwt-strategy';
-import * as config from 'config';
+//import * as config from 'config';
 import {configObject} from '../config.object'
 import { ConfigService, ConfigModule } from '@nestjs/config';
 
-const jwtConfig = config.get('jwt');
+//const jwtConfig = config.get('jwt');
 const configService = new ConfigService();
 @Module({
   imports: [
@@ -20,7 +20,7 @@ const configService = new ConfigService();
     JwtModule.register({
       secret: configObject.jwt_secret,
       signOptions: {
-        expiresIn:jwtConfig.expiresIn,
+        expiresIn: 3600,
       }
     })
   ],
