@@ -19,7 +19,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       password:configObject.db_password,
       database:configObject.db_name,
       //url: this.configService.get<string>('TYPEORM_URL'),
-      synchronize: configObject.db_sync,
+      synchronize:true,
+      //synchronize: configObject.db_sync,
       entities:[Task,User],
     }
   }

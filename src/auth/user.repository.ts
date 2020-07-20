@@ -3,6 +3,7 @@ import { User } from "./user.entity";
 import { AuthCredentialsDTO } from "./dto/auth-credentials.dto";
 import * as bcrypt from 'bcrypt';
 import { noop } from "rxjs";
+import { UserRoles } from "./enums/user-roles.enum";
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User>
@@ -14,6 +15,7 @@ export class UserRepository extends Repository<User>
         const salt=await bcrypt.genSalt();
         user.username=username;
         user.password=await this.hashPassword(password,salt);
+        user.role=UserRoles.User;
         user.salt=salt;
         try
         {
@@ -32,6 +34,10 @@ export class UserRepository extends Repository<User>
     signIn(authCredentialsDto:AuthCredentialsDTO):Promise<string>
     {
         return this.validateUserPassword(authCredentialsDto);
+    }
+    public async findUserById(userid:number):Promise<User>
+    {
+        return await this.findOne(userid);
     }
     private async validateUserPassword(authCredentialsDto):Promise<string>
     {

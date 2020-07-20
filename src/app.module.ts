@@ -7,7 +7,6 @@ import {ConfigService} from '@nestjs/config';
 import { TypeOrmConfigService } from './typeormconfig.service';
 import {configObject} from './config.object';
 import { FillModule } from './fill/fill.module';
-
 /*function FillObject()
 {
     configObject.db_username=this.configService.get<string>('DB_USERNAME');
@@ -32,6 +31,7 @@ FillObject();*/
     AuthModule,
     
   ],
+  controllers: [],
 })
 export class AppModule {
   
